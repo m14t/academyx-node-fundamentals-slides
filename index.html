@@ -4,10 +4,10 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>reveal.js – The HTML Presentation Framework</title>
+		<title>Node.js Fundamentals</title>
 
-		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
-		<meta name="author" content="Hakim El Hattab">
+		<meta name="description" content="Get the most out of your existing JavaScript skills by learning how to apply them to a server environment.">
+		<meta name="author" content="Matt Farmer">
 
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -19,7 +19,6 @@
 
 		<!-- Code syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
-
 		<!-- Printing and PDF exports -->
 		<script>
 			var link = document.createElement( 'link' );
@@ -41,340 +40,744 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>Reveal.js</h1>
-					<h3>The HTML Presentation Framework</h3>
-					<p>
-						<small>Created by <a href="http://hakim.se">Hakim El Hattab</a> / <a href="http://twitter.com/hakimel">@hakimel</a></small>
-					</p>
+					<h1><code>Node.js Fundamentals</code></h1>
+					<h3>
+						Created by Matt Farmer
+					</h3>
 				</section>
 
 				<section>
-					<h2>Hello There</h2>
-					<p>
-						reveal.js enables you to create beautiful interactive slide decks using HTML. This presentation will show you examples of what it can do.
-					</p>
+					<h2>About Me</h2>
+					<ul>
+						<li>Matt Farmer</li>
+						<li>
+							Traveled to Europe for EMC to train people on hard drive failures
+							<ul>
+								<li>Gained a passion for IO</li>
+							</ul>
+						</li>
+						<li>
+							2009 - 2014 - Director of Technology for UseAllFive
+							<ul>
+								<li>Attended Node.js camp in 2010</li>
+							</ul>
+						<li>
+							2015 - CTO of GoFormative.com
+							<ul>
+								<li>Created multi-threaded WebSocket to RESTful API bridge</li>
+							</ul>
+						</li>
+					</ul>
 				</section>
 
-				<!-- Example of nested vertical slides -->
+				<section>
+					<h2>What we will learn</h2>
+					<ul>
+						<li>Intro to Javascript</li>
+						<li>How to install Node, and 3rd party libraries</li>
+						<li>Create a basic HTTP server</li>
+						<li>Build our first Express.js application</li>
+						<li>Use Socket.io to create a Chat server</li>
+					</ul>
+					<aside class="notes" data-markdown>
+						* What is your background in web development + Javascript?
+						* How many of you use Node.js already?
+						* What would you like to get out of this class?
+					</aside>
+				</section><!-- END "What we will learn" -->
+
+				<section>
+					<h2>Intro to Javascript</h2>
+					<section>
+						<h3>History</h3>
+						<ul>
+							<li>Dominate language used for dynamic content on the web</li>
+							<li>Created in 1995</li>
+							<li>Primarily in browser until Node.js - 2009</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Details</h3>
+						<ul>
+							<li>Small language</li>
+							<li>Protypical (not classical) Language</li>
+							<li>
+								Very quirky
+								<ul>
+									<li><a href="http://www.amazon.com/dp/0596805527">JavaScript: The Definitive Guide</a> - 1096 Pages</li>
+									<li>
+										<a href="http://www.amazon.com/dp/0596517742">JavaScript: The Good Parts</a> - 176 pages
+										<ul>
+											<li>
+												<a href="https://www.youtube.com/watch?v=hQVTIJBZook">The Good Parts @ Google 2009</a></li>
+											<li>
+												<a href="https://www.youtube.com/watch?v=bo36MrBfTk4">The Better Parts @ JSConfUY 2014</a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Language Features - Variables</h3>
+						<ul>
+							<li>
+								Traditional defined with the <code>var</code> keyword
+								<ul>
+									<li>Has many confusing properties, like <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting">variable hoisting</a></li>
+								</ul>
+							</li>
+							<li>
+								ES6 added:
+								<ul>
+									<li><code>let</code>: like <code>var</code> but without hoisting and block scoped</li>
+									<li><code>const</code>: like <code>let</code> but can only be assigned once</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Language Features - Variables</h3>
+						<pre><code>
+console.log(varVariable); // Undefined -- no error
+console.log(letVariable); // ReferenceError: letVariable is not defined
+console.log(constVariable); // ReferenceError: constVariable is not defined
+
+var varVariable = 'v';
+let letVariable = 'l';
+const constVariable = { 'name': 'c' };
+
+// Watch out! This is works!
+constVariable.favoriteLanguage = 'javascript';
+
+constVariable = 'another string'; //TypeError: Assignment to constant variable.
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Language Features - Arrays</h3>
+						<pre><code>
+let myArray = [
+	'one',
+	'two',
+];
+
+myArray.push('three');       // Push an item onto the end of a list
+myArray.unshift('zero');     // Push an item onto the end of a list
+console.log(myArray.pop());  // Return the last item in the list, and remove it
+console.log(myArray.pop());  // Return the first item in the list, and remove it
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Language Features - Arrays</h3>
+
+						There are many other useful methods, including:
+						<ul>
+							<li>
+								<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat"><code>[].concat</code></a> - Join two arrays
+							</li>
+							<li>
+								<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every"><code>[].every</code></a> - Test if all elements pass a condition
+							</li>
+							<li>
+								<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter"><code>[].filter</code></a> - Return a new array only elements that pass function
+							</li>
+							<li>
+								<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach"><code>[].forEach</code></a> - Loop over all elements in array
+							</li>
+							<li>
+								<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join"><code>[].join</code></a> - Join all elements of an array into a string
+							</li>
+							<li>
+								<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map"><code>[].map</code></a> - Creates a new array with the results of the provided function
+							</li>
+							<li>
+								<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce"><code>[].reduce</code></a> - Reduce it to a single value
+							</li>
+							<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"><code>[].sort</code></a> - Sort an array <u><em>in place</em></u></li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Language Features - Objects</h3>
+						<pre><code>
+let myObject = {
+	a: 'value',
+	b: function() { console.log('do something'); },
+};
+
+myObject.a = 'new value';
+
+let key = 'a';
+myObject[key] = 'value set via dynamic key';
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Language Features - Functions</h3>
+						<pre><code>
+	function fnName(parameter1, parameter2, parameter3) {
+	    // code to be executed
+	}
+						</code></pre>
+
+						<ul>
+							<li>First class - just like any other variable</li>
+							<li>Can be:
+								<ul>
+								 	<li>constructed during the execution of a program</li>
+									<li>stored in data structures</li>
+									<li>passed as arguments to other functions</li>
+									<li>returned as the values of other functions</li>
+								 </ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Language Features - Closure</h3>
+						<blockquote cite="http://javascriptissexy.com/understand-javascript-closures-with-ease/">
+							A closure is an inner function that has access to the outer (enclosing) function's variables—scope chain. The closure has three scope chains: it has access to its own scope (variables defined between its curly brackets), it has access to the outer function's variables, and it has access to the global variables.
+						</blockquote>
+					</section>
+
+					<section>
+						<h3>Language Features - Closure</h3>
+						<pre><code>
+function carFactory(make) {
+    function getMake() { return make; }
+    function setMake(newMake) { make = newMake; }
+
+    var publicMethods = {
+        "getMake": getMake,
+        "setMake": setMake,
+    };
+    return publicMethods;
+}
+
+var ford = carFactory('ford');
+console.log(ford.getMake());    // ford
+ford.setMake('honda');
+console.log(ford.getMake());    // honda
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Workshop time!</h3>
+						<p>
+							To run the workshop, simply type the following:
+						</p>
+						<pre><code>
+npm install --global javascripting
+
+javascripting
+						</code></pre>
+						<small>
+							(
+							provided by
+							<a href="http://nodeschool.io/#javascripting">http://nodeschool.io</a>
+							)
+						</small>
+					</section>
+				</section><!-- END "Intro to Javascript" -->
+
+				<section>
+					<h2>Core Node.js modules</h2>
+
+					<section>
+						<h3>http</h3>
+						<pre><code>
+let http = require('http');
+const PORT = 3000;
+
+http.createServer(function (req, res) {
+	// handle request
+}).listen(PORT);
+						</code></pre>
+						Learn more at: <a href="http://nodejs.org/api/http.html#http_http">http://nodejs.org/api/http.html#http_http</a>
+					</section>
+
+					<section>
+						<h3>querystring</h3>
+						<pre><code>
+let querystring = require('querystring');
+
+let str = querystring.stringify({
+	practical: 'node',
+	lang: 'js',
+});
+console.log(str);  // practical=node&amp;lang=js
+
+let params = querystring.parse('param1=a&amp;param2=b');
+console.log(params); // { param1: 'a', param2: 'b' }
+						</code></pre>
+						Learn more at: <a href="http://nodejs.org/api/querystring.html">http://nodejs.org/api/querystring.html</a>
+					</section>
+
+					<section>
+						<h3>url</h3>
+						<pre><code>
+let url = require('url');
+
+let parts = url.parse('http://user:pass@host.com:8080/p/a/t/h?query=string&amp;param2=two#hash');
+console.log(parts);
+
+// Url {
+//   protocol: 'http:',                slashes: true,
+//   auth: 'user:pass',                host: 'host.com:8080',
+//   port: '8080',                     hostname: 'host.com',
+//   hash: '#hash',                    search: '?query=string&amp;param2=two',
+//   query: 'query=string&amp;param2=two',
+//   pathname: '/p/a/t/h',             path: '/p/a/t/h?query=string&amp;param2=two',
+//   href: 'http://user:pass@host.com:8080/p/a/t/h?query=string&amp;param2=two#hash'
+// }
+						</code></pre>
+						Learn more at: <a href="http://nodejs.org/api/url.html">http://nodejs.org/api/url.html</a>
+					</section>
+
+					<section>
+						<h3>fs</h3>
+						<pre><code>
+let fs = require('fs');
+
+let fileName = 'message.txt';
+let contents = 'Hello\nWorld!';
+
+fs.writeFile(fileName, contents, function (err) {
+  if (err) throw err;
+  console.log('Writing is done.');
+});
+
+fs.readFile(fileName, function (err, data) {
+  if (err) throw err;
+  console.log(data.toString());
+});
+						</code></pre>
+						Learn more at: <a href="http://nodejs.org/api/fs.html">http://nodejs.org/api/fs.html</a>
+					</section>
+
+<section>
+						<h3>fs (streams)</h3>
+						<pre><code>
+let fs = require('fs');
+
+let fileName = 'message.txt';
+
+fs.createReadStream(fileName).pipe(process.stdout);
+						</code></pre>
+						Learn more at: <a href="http://nodeschool.io/#streamadventure">http://nodeschool.io/#streamadventure</a>
+					</section>
+
+				</section><!-- END "Core Node.js modules" -->
+
 				<section>
 					<section>
-						<h2>Vertical Slides</h2>
-						<p>Slides can be nested inside of each other.</p>
-						<p>Use the <em>Space</em> key to navigate through all slides.</p>
-						<br>
-						<a href="#" class="navigate-down">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
+						<h2>How to install Node, and 3rd party libraries</h2>
 					</section>
+
 					<section>
-						<h2>Basement Level 1</h2>
-						<p>Nested slides are useful for adding additional detail underneath a high level horizontal slide.</p>
-					</section>
+						<h3>Installing Node</h3>
+						<ul>
+							<li>Requirement: be able to install multiple versions at once</li>
+							<li>
+								Many solutions exist
+								<ul>
+									<li>
+										<a href="https://github.com/isaacs/nave"><code>Nave</code></a> -
+										Built by the creator of NPM
+									</li>
+									<li>
+										<a href="https://github.com/creationix/nvm"><code>NVM</code></a> -
+										Like Ruby's `rvm` command
+									</li>
+									<li>
+										<a href="https://github.com/tj/n"><code>N</code></a> -
+										Created by tj (a prolific Node.js contributor)
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section><!-- END "Installing Node" -->
+
 					<section>
-						<h2>Basement Level 2</h2>
-						<p>That's it, time to go back up.</p>
-						<br>
-						<a href="#/2">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-						</a>
+						<h2>NPM</h2>
+						<ul>
+							<li>
+								<code>npm init</code>
+								<ul>
+									<li>Creates a <code>package.json</code> file</li>
+								</ul>
+							</li>
+							<li>
+								<code>npm install</code>
+								<ul>
+									<li>Install packages already listed in a projects's <code>package.json</code> file into a <code>node_modules</code> folder</li>
+								</ul>
+							</li>
+							<li>
+								<code>npm install --save &lt;package name&gt;&lt;/package&gt;</code> and <br><code>npm install --save-dev &lt;package name&gt;&lt;/package&gt;</code>
+								<ul>
+									<li>Add a dependency to your <code>package.json</code></li>
+								</ul>
+							</li>
+							<li>
+								Git considerations
+								<ul>
+								    <li>Add <code>node_modules</code> to your <code>.gitignore</code> file.</li>
+								    <li>We don't want to check in other people's code into our project</li>
+								</ul>
+							</li>
+						</ul>
+					</section><!-- END "NPM" -->
+
+					<section data-markdown>
+						## `package.json` file
+						* `name` - the name of your project as would be listed on npmjs.com
+						* `dependencies` - a list of packages needed to *RUN* your project
+						* `devDependencies` - a list of packages need to *DEVELOPE* or *TEST* your project
+						* `scripts` - a list of aliased commands your project supports
+						* `private` - set this to true to ensure that your project DOES NOT end up on npmjs.com
+						* `license` - the license under which you are releasing your code
+						    * `UNLICENSED` for private packages
+						    * http://choosealicense.com/
+					</section><!-- END "package.json file" -->
+
+					<section data-markdown>
+						## `package.json` file (continued)
+						* Interactive guide:
+						    * http://browsenpm.org/package.json
+					</section><!-- END "package.json file (continued)" -->
+					<section data-markdown>
+						## How to find select / packages
+						* Search https://www.npmjs.com/
+						* Compare:
+							* number of stars / forks
+							* number of downloads
+							* last contribution date
+							* number of open pull requests
+							* number of open issues
+					</section><!-- END "How to find select / packages" -->
+				</section><!-- END "How to install Node, and 3rd party libraries" -->
+
+				<section>
+					<section>
+						<h2>Basic HTTP Server</h2>
 					</section>
-				</section>
+
+					<section>
+						<h3>The very basics</h3>
+						<pre><code>let http = require('http');
+const PORT = 3000;
+
+http.createServer(function (req, res) {
+  res.writeHead(
+    200,
+    {
+      'Content-Type': 'text/plain'
+    }
+  );
+  res.end('Hello World\n');
+}).listen(PORT);
+
+console.log(`Server running at http://0.0.0.0:${PORT}/`);
+						</code></pre>
+						<a href="https://github.com/m14t/academyx-node-fundamentals/blob/001-initial-http-server/index.js">See on GitHub</a>
+					</section><!-- END "The very basics" -->
+
+					<section>
+						<h3>Using a 3rd party library</h3>
+						<pre><code>let http = require('http');
+let status = require('statuses');
+const PORT = 3000;
+
+http.createServer(function (req, res) {
+  res.writeHead(
+    status('OK'),
+    {
+      'Content-Type': 'text/plain'
+    }
+  );
+  res.end('Hello World\n');
+}).listen(PORT);
+
+console.log(`Server running at http://0.0.0.0:${PORT}/`);
+						</code></pre>
+					</section><!-- END "Using a 3rd party library" -->
+
+					<section>
+						<h3>Watching Files</h3>
+						Restarting server on file change is annoying.<br>
+						Let's setup something to do this for us.
+						<pre><code>npm install --save-dev supervisor</code></pre>
+						Add the following to the <code>scripts</code> object in our <code>package.json</code> file:
+						<pre><code>"dev": "supervisor --debug index.js"</code></pre>
+						Now we can simply run:
+						<pre><code>npm run dev</code></pre>
+					</section>
+				</section><!-- END "Basic HTTP Server" -->
 
 				<section>
-					<h2>Slides</h2>
-					<p>
-						Not a coder? Not a problem. There's a fully-featured visual editor for authoring these, try it out at <a href="http://slides.com" target="_blank">http://slides.com</a>.
-					</p>
-				</section>
+					<section>
+						<h2>Upgrade to Express.js</h2>
+					</section>
+
+					<section>
+						<h3>What is Express.js</h3>
+						<ul>
+							<li>A framework for Node.js applications</li>
+							<li>Recently added to Node.js Foundation's incubator</li>
+						</ul>
+					</section><!-- END "What is Express.js" -->
+
+					<section>
+						<h3>Why use Express.js</h3>
+						<ul>
+							<li>
+            					Aids with:
+								<ul>
+                					<li>Parsing of HTTP request bodies</li>
+                					<li>Parsing of cookies</li>
+                					<li>Managing sessions</li>
+                					<li>Organizing routes</li>
+                					<li>Determining proper response headers based on data types</li>
+								</ul>
+							</li>
+						</ul>
+					</section><!-- END "Why use Express.js" -->
+
+					<section>
+						<h3>Upgrade our app</h3>
+						<pre><code>
+var express = require('express');
+var app = express();
+
+const PORT = 3000;
+
+app.get('/', function (req, res) {
+    res.end('Hello World\n');
+});
+
+app.listen(PORT, function () {
+    console.log(`Server running at http://0.0.0.0:${PORT}/`);
+});
+						</code></pre>
+						<a href="https://github.com/m14t/academyx-node-fundamentals/blob/dea305821759983b95bad524a519509413fee36a/index.js">View on GitHub</a>
+					</section><!-- END "Upgrade our app" -->
+
+					<section>
+						<h3>What did we gain?</h3>
+						<ul>
+							<li>Slightly less code</li>
+							<li>Get routing out of the box</li>
+							<li>Ready for extension via Middlewares</li>
+						</ul>
+					</section><!-- END "What did we gain?" -->
+
+					<section>
+						<h3>Add a template engine</h3>
+						<ul>
+							<li>
+								<a href="jade-lang.com">Jade</a>
+								<ul>
+									<li>Default, but many other engines are available</li>
+									<li>Helps ensure valid HTML</li>
+									<li>Adds includes, extends, variables</li>
+									<li>Much much more...</li>
+									<li>Minifies HTML</li>
+								</ul>
+							</li>
+						</ul>
+						<aside class="notes" data-markdown>
+							* See Chapter 4 for more details
+						</aside>
+					</section><!-- END "Add a template engine" -->
+
+					<section>
+						<h3>Add a template engine (cont)</h3>
+						Install via:<pre><code>npm install --save jade</code></pre>
+						In our app: <pre><code>app.set('view engine', 'jade');</code></pre>
+						In our controller: <pre><code>res.render('index', {msg: 'Welcome to the Practical Node.js!'})</code></pre>
+						<a href="https://github.com/m14t/academyx-node-fundamentals/releases/tag/004-use-jade">See on GitHub</a>
+					</section><!-- END "Add a template engine (cont)" -->
+
+					<section>
+						<h3>Serving static files</h3>
+						Require external dependencies with NPM
+						<pre><code>npm install --save jquery</code></pre>
+            			Configure Express to serve files:
+		                <pre><code>let virtualPath = '/static';
+app.use(
+    virtualPath,
+    [
+    	express.static('node_modules/jquery/dist'),
+    ]
+);
+		                </code></pre>
+			            Reference the virtual path in your HTML
+                		<pre><code>script(src="static/jquery.min.js")</code></pre>
+					</section><!-- END "Serving static files" -->
+
+					<section>
+						<h3>Routing</h3>
+						Created by adding:<pre><code>app.VERB(url, fn1, fn2 ..., fn)</code></pre>
+						<ul>
+							<li>
+								<code>url</code> - is a "RegExp" string
+								<ul>
+									<li>See <a href="https://www.npmjs.com/package/path-to-regexp">path-to-regexp</a></li>
+								</ul>
+							</li>
+							<li>
+								<code>fnNs</code> - are request handlers
+							</li>
+							<li>
+								<code>VERB</code> - is one of:
+								<ul>
+									<li><code>all</code> - catch every request (all methods)</li>
+									<li><code>get</code> - catch GET requests</li>
+									<li><code>post</code> - catch POST requests</li>
+									<li><code>put</code> - catch PUT requests</li>
+									<li><code>del</code> - catch DELETE requests</li>
+								</ul>
+							</li>
+						</ul>
+					</section><!-- END "Routing" -->
+
+					<section>
+						<h3>Request Handlers</h3>
+						<ul>
+							<li>
+								Take three parameters:
+								<ul>
+									<li><code>req</code> - Request</li>
+									<li><code>res</code> - Response </li>
+									<li><code>next</code> - "just kidding, I don't want to handle this"</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Request Handlers (cont)</h3>
+
+						Useful <code>res</code> methods:<br>
+						<ul>
+							<li>
+								<a href="http://expressjs.com/en/api.html#res.cookie"><code>res.cookie()</code></a>
+								- Sets cookie name to value
+							</li>
+							<li>
+								<a href="http://expressjs.com/en/api.html#res.download"><code>res.download()</code></a>
+								- Transfers file as an “attachment”
+							</li>
+							<li>
+								<a href="http://expressjs.com/en/api.html#res.redirect"><code>res.redirect()</code></a>
+								- Redirects to the URL
+							</li>
+							<li>
+								<a href="http://expressjs.com/en/api.html#res.render"><code>res.render()</code></a>
+								- Renders a view and sends the rendered HTML
+							</li>
+							<li>
+								<a href="http://expressjs.com/en/api.html#res.send"><code>res.send()</code></a>
+								- Sends the HTTP response. The body parameter can be a Buffer object, a String, an object, or an Array
+							</li>
+						</ul>
+					</section><!-- END "Routing (cont)" -->
+				</section><!-- END "Upgrade to Express.js" -->
 
 				<section>
-					<h2>Point of View</h2>
-					<p>
-						Press <strong>ESC</strong> to enter the slide overview.
-					</p>
-					<p>
-						Hold down alt and click on any element to zoom in on it using <a href="http://lab.hakim.se/zoom-js">zoom.js</a>. Alt + click anywhere to zoom back out.
-					</p>
-				</section>
 
-				<section>
-					<h2>Touch Optimized</h2>
-					<p>
-						Presentations look great on touch devices, like mobile phones and tablets. Simply swipe through your slides.
-					</p>
-				</section>
+					<section>
+						<h2>WebSockets</h2>
+						<blockquote cite="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API">
+						WebSockets is an advanced technology that makes it possible to open an interactive communication session between the user's browser and a server. With this API, you can send messages to a server and receive event-driven responses without having to poll the server for a reply.
+						</blockquote>
+					</section>
 
-				<section data-markdown>
-					<script type="text/template">
-						## Markdown support
-
-						Write content using inline or external Markdown.
-						Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
-
-						```
-						<section data-markdown>
-						  ## Markdown support
-
-						  Write content using inline or external Markdown.
-						  Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
-						</section>
-						```
-					</script>
-				</section>
-
-				<section>
-					<section id="fragments">
-						<h2>Fragments</h2>
-						<p>Hit the next arrow...</p>
-						<p class="fragment">... to step through ...</p>
-						<p><span class="fragment">... a</span> <span class="fragment">fragmented</span> <span class="fragment">slide.</span></p>
-
-						<aside class="notes">
-							This slide has fragments which are also stepped through in the notes window.
+					<section>
+						<h3><a href="http://socket.io/">Socket.io</a></h3>
+						<ul>
+							<li>Socket.IO enables real-time bidirectional event-based communication.</li>
+							<li>It works on every platform, browser or device, focusing equally on reliability and speed.</li>
+							<li>
+								Use by:
+								<ul>
+									<li>Microsoft Office</li>
+									<li>Yammer</li>
+									<li>Zendesk</li>
+									<li>Trello</li>
+								</ul>
+							</li>
+						</ul>
+						<aside class="notes" data-markdown>
+							* Chapter 9
+							* Page 198
 						</aside>
 					</section>
+
 					<section>
-						<h2>Fragment Styles</h2>
-						<p>There's different types of fragments, like:</p>
-						<p class="fragment grow">grow</p>
-						<p class="fragment shrink">shrink</p>
-						<p class="fragment fade-out">fade-out</p>
-						<p class="fragment current-visible">current-visible</p>
-						<p class="fragment highlight-red">highlight-red</p>
-						<p class="fragment highlight-blue">highlight-blue</p>
+						<h3><a href="http://stackoverflow.com/a/10099325/161805">Socket.io socket commands</a></h3>
+						<pre><code>// sending to sender-client only
+socket.emit('message', "this is a test");
+
+// sending to all clients, include sender
+io.emit('message', "this is a test");
+
+// sending to all clients except sender
+socket.broadcast.emit('message', "this is a test");
+</pre></code>
 					</section>
-				</section>
 
-				<section id="transitions">
-					<h2>Transition Styles</h2>
-					<p>
-						You can select from different transitions, like: <br>
-						<a href="?transition=none#/transitions">None</a> -
-						<a href="?transition=fade#/transitions">Fade</a> -
-						<a href="?transition=slide#/transitions">Slide</a> -
-						<a href="?transition=convex#/transitions">Convex</a> -
-						<a href="?transition=concave#/transitions">Concave</a> -
-						<a href="?transition=zoom#/transitions">Zoom</a>
-					</p>
-				</section>
+					<section>
+						<h3><a href="http://stackoverflow.com/a/10099325/161805">Socket.io socket commands (cont)</a></h3>
+						<pre><code>// sending to all clients in 'game' room(channel) except sender
+socket.broadcast.to('game').emit('message', 'nice game');
 
-				<section id="themes">
-					<h2>Themes</h2>
-					<p>
-						reveal.js comes with a few themes built in: <br>
-						<!-- Hacks to swap themes after the page has loaded. Not flexible and only intended for the reveal.js demo deck. -->
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/black.css'); return false;">Black (default)</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/white.css'); return false;">White</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/league.css'); return false;">League</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/sky.css'); return false;">Sky</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/beige.css'); return false;">Beige</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/simple.css'); return false;">Simple</a> <br>
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/serif.css'); return false;">Serif</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/blood.css'); return false;">Blood</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/night.css'); return false;">Night</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/moon.css'); return false;">Moon</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/solarized.css'); return false;">Solarized</a>
-					</p>
+// sending to all clients in 'game' room(channel), include sender
+io.in('game').emit('message', 'cool game');
+
+// sending to sender client, only if they are in 'game' room(channel)
+socket.to('game').emit('message', 'enjoy the game');
+
+// sending to all clients in namespace 'myNamespace', include sender
+io.of('myNamespace').emit('message', 'gg');
+
+// sending to individual socketid
+socket.broadcast.to(socketid).emit('message', 'for your eyes only');</code></pre>
+					</section>
 				</section>
 
 				<section>
-					<section data-background="#dddddd">
-						<h2>Slide Backgrounds</h2>
-						<p>
-							Set <code>data-background="#dddddd"</code> on a slide to change the background color. All CSS color formats are supported.
-						</p>
-						<a href="#" class="navigate-down">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-					</section>
-					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png">
-						<h2>Image Backgrounds</h2>
-						<pre><code class="hljs">&lt;section data-background="image.png"&gt;</code></pre>
-					</section>
-					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" data-background-repeat="repeat" data-background-size="100px">
-						<h2>Tiled Backgrounds</h2>
-						<pre><code class="hljs" style="word-wrap: break-word;">&lt;section data-background="image.png" data-background-repeat="repeat" data-background-size="100px"&gt;</code></pre>
-					</section>
-					<section data-background-video="https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.mp4,https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.webm" data-background-color="#000000">
-						<div style="background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px;">
-							<h2>Video Backgrounds</h2>
-							<pre><code class="hljs" style="word-wrap: break-word;">&lt;section data-background-video="video.mp4,video.webm"&gt;</code></pre>
-						</div>
-					</section>
-					<section data-background="http://i.giphy.com/90F8aUepslB84.gif">
-						<h2>... and GIFs!</h2>
-					</section>
-				</section>
-
-				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
-					<h2>Background Transitions</h2>
-					<p>
-						Different background transitions are available via the backgroundTransition option. This one's called "zoom".
-					</p>
-					<pre><code class="hljs">Reveal.configure({ backgroundTransition: 'zoom' })</code></pre>
-				</section>
-
-				<section data-transition="slide" data-background="#b5533c" data-background-transition="zoom">
-					<h2>Background Transitions</h2>
-					<p>
-						You can override background transitions per-slide.
-					</p>
-					<pre><code class="hljs" style="word-wrap: break-word;">&lt;section data-background-transition="zoom"&gt;</code></pre>
-				</section>
-
-				<section>
-					<h2>Pretty Code</h2>
-					<pre><code class="hljs" data-trim contenteditable>
-function linkify( selector ) {
-  if( supports3DTransforms ) {
-
-    var nodes = document.querySelectorAll( selector );
-
-    for( var i = 0, len = nodes.length; i &lt; len; i++ ) {
-      var node = nodes[i];
-
-      if( !node.className ) {
-        node.className += ' roll';
-      }
-    }
-  }
-}
-					</code></pre>
-					<p>Code syntax highlighting courtesy of <a href="http://softwaremaniacs.org/soft/highlight/en/description/">highlight.js</a>.</p>
-				</section>
-
-				<section>
-					<h2>Marvelous List</h2>
-					<ul>
-						<li>No order here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Fantastic Ordered List</h2>
+					<h2>Deploying to Heroku</h2>
 					<ol>
-						<li>One is smaller than...</li>
-						<li>Two is smaller than...</li>
-						<li>Three!</li>
+						<li>Create an account at <a href="https://www.heroku.com">https://www.heroku.com</a></li>
+						<li>Create new app</li>
+						<li>Install the <a href="https://toolbelt.heroku.com/">Heroku Toolbelt</a></li>
+						<li>
+							Run the following:
+							<pre><code>
+heroku login
+heroku keys:add ~/.ssh/your_rsa_key.pub
+heroku git:remote -a practical-node
+git push heroku master
+							</code></pre>
+						</li>
 					</ol>
-				</section>
-
-				<section>
-					<h2>Tabular Tables</h2>
-					<table>
-						<thead>
-							<tr>
-								<th>Item</th>
-								<th>Value</th>
-								<th>Quantity</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Apples</td>
-								<td>$1</td>
-								<td>7</td>
-							</tr>
-							<tr>
-								<td>Lemonade</td>
-								<td>$2</td>
-								<td>18</td>
-							</tr>
-							<tr>
-								<td>Bread</td>
-								<td>$3</td>
-								<td>2</td>
-							</tr>
-						</tbody>
-					</table>
-				</section>
-
-				<section>
-					<h2>Clever Quotes</h2>
-					<p>
-						These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						&ldquo;The nice thing about standards is that there are so many to choose from&rdquo;</q> and block:
-					</p>
-					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						&ldquo;For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
-						reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.&rdquo;
-					</blockquote>
-				</section>
-
-				<section>
-					<h2>Intergalactic Interconnections</h2>
-					<p>
-						You can link between slides internally,
-						<a href="#/2/3">like this</a>.
-					</p>
-				</section>
-
-				<section>
-					<h2>Speaker View</h2>
-					<p>There's a <a href="https://github.com/hakimel/reveal.js#speaker-notes">speaker view</a>. It includes a timer, preview of the upcoming slide as well as your speaker notes.</p>
-					<p>Press the <em>S</em> key to try it out.</p>
-
-					<aside class="notes">
-						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					<aside class="notes" data-markdown>
+						* Page 244
 					</aside>
 				</section>
-
 				<section>
-					<h2>Export to PDF</h2>
-					<p>Presentations can be <a href="https://github.com/hakimel/reveal.js#pdf-export">exported to PDF</a>, here's an example:</p>
-					<iframe src="https://www.slideshare.net/slideshow/embed_code/42840540" width="445" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+					<h2>Thanks!</h2>
+					<h1>&nbsp;</h1>
+					<h2>Questions?</h2>
 				</section>
-
-				<section>
-					<h2>Global State</h2>
-					<p>
-						Set <code>data-state="something"</code> on a slide and <code>"something"</code>
-						will be added as a class to the document element when the slide is open. This lets you
-						apply broader style changes, like switching the page background.
-					</p>
-				</section>
-
-				<section data-state="customevent">
-					<h2>State Events</h2>
-					<p>
-						Additionally custom events can be triggered on a per slide basis by binding to the <code>data-state</code> name.
-					</p>
-					<pre><code class="javascript" data-trim contenteditable style="font-size: 18px;">
-Reveal.addEventListener( 'customevent', function() {
-	console.log( '"customevent" has fired' );
-} );
-					</code></pre>
-				</section>
-
-				<section>
-					<h2>Take a Moment</h2>
-					<p>
-						Press B or . on your keyboard to pause the presentation. This is helpful when you're on stage and want to take distracting slides off the screen.
-					</p>
-				</section>
-
-				<section>
-					<h2>Much more</h2>
-					<ul>
-						<li>Right-to-left support</li>
-						<li><a href="https://github.com/hakimel/reveal.js#api">Extensive JavaScript API</a></li>
-						<li><a href="https://github.com/hakimel/reveal.js#auto-sliding">Auto-progression</a></li>
-						<li><a href="https://github.com/hakimel/reveal.js#parallax-background">Parallax backgrounds</a></li>
-						<li><a href="https://github.com/hakimel/reveal.js#keyboard-bindings">Custom keyboard bindings</a></li>
-					</ul>
-				</section>
-
-				<section style="text-align: left;">
-					<h1>THE END</h1>
-					<p>
-						- <a href="http://slides.com">Try the online editor</a> <br>
-						- <a href="https://github.com/hakimel/reveal.js">Source code &amp; documentation</a>
-					</p>
-				</section>
-
 			</div>
 
 		</div>
@@ -391,6 +794,8 @@ Reveal.addEventListener( 'customevent', function() {
 				progress: true,
 				history: true,
 				center: true,
+			    width: 1240,
+
 
 				transition: 'slide', // none/fade/slide/convex/concave/zoom
 
